@@ -1,0 +1,13 @@
+Tasks:
+
+a set of initial screens where users will select their
+- characters,
+- starting money, 
+- determine the order in which players will move.
+
+In the second iteration, the team will implement the main game screen
+ in addition to the dice rolling and movement of players:
+A game board containing at least 20 tiles
+A player located in the starting position
+A button that will move the player forward by 1 tile
+A button that will move the player forward by 3 tiles
