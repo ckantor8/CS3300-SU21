@@ -34,7 +34,6 @@ public class ConfigScreen {
     private Button returnButton;
     private VBox options;
     private TextField name;
-    private int diff;
     private Color chtr;
     private String input;
     private ToggleButton easy;
@@ -147,36 +146,36 @@ public class ConfigScreen {
             new Insets(0, 140, 0, 140))));
         instruction3.getChildren().add(instr3);
         options.getChildren().add(instruction3);
-        HBox chtrons = new HBox();
-        chtrons.setSpacing(10);
-        chtrons.setAlignment(Pos.CENTER);
-        ToggleGroup chtron = new ToggleGroup();
+        HBox chtrs = new HBox();
+        chtrs.setSpacing(10);
+        chtrs.setAlignment(Pos.CENTER);
+        ToggleGroup chtr = new ToggleGroup();
 
         red = new ToggleButton("Red");
         red.setId("red");
         red.setContentDisplay(ContentDisplay.TOP);
-        chtrons.getChildren().add(red);
-        red.setToggleGroup(chtron);
+        chtrs.getChildren().add(red);
+        red.setToggleGroup(chtr);
 
         blue = new ToggleButton("Blue");
         blue.setId("blue");
         blue.setContentDisplay(ContentDisplay.TOP);
-        chtrons.getChildren().add(blue);
-        blue.setToggleGroup(chtron);
+        chtrs.getChildren().add(blue);
+        blue.setToggleGroup(chtr);
 
         yellow = new ToggleButton("Yellow");
         yellow.setId("yellow");
         yellow.setContentDisplay(ContentDisplay.TOP);
-        chtrons.getChildren().add(yellow);
-        yellow.setToggleGroup(chtron);
+        chtrs.getChildren().add(yellow);
+        yellow.setToggleGroup(chtr);
 
         purple = new ToggleButton("Purple");
         purple.setId("purple");
         purple.setContentDisplay(ContentDisplay.TOP);
-        chtrons.getChildren().add(purple);
-        purple.setToggleGroup(chtron);
+        chtrs.getChildren().add(purple);
+        purple.setToggleGroup(chtr);
 
-        options.getChildren().add(chtrons);
+        options.getChildren().add(chtrs);
 
         HBox buttons = new HBox();
         buttons.setSpacing(25);
@@ -207,7 +206,6 @@ public class ConfigScreen {
                 + " entered\nPlease enter a valid name");
             invalidName.show();
         } else {
-            diff = 0;
             if (easy.isSelected()) {
                 gold = 4;
             } else if (medium.isSelected()) {
@@ -248,10 +246,6 @@ public class ConfigScreen {
 
         }
         return -1;
-    }
-
-    public int getDifficulty() {
-        return diff;
     }
 
     public Color getChtr() {

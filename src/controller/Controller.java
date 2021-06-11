@@ -2,11 +2,12 @@ package controller;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import model.PlayerModel;
@@ -14,16 +15,20 @@ import view.ConfigScreen;
 import view.Screen;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Controller extends Application {
-    public Circle user;
+    @FXML
     public GridPane grid;
+    @FXML
+    public Circle user = new Circle(15);
     private Stage stage;
     private PlayerModel playerModel;
     private final int width = 500;
     private final int height = 500;
+    private int c = 0;
+    private int r = 1;
+    private Color circ;
 
 
     @Override
@@ -36,8 +41,7 @@ public class Controller extends Application {
 
     private void initWelcomeScreen() {
         stage.setTitle("Your New Favorite Dungeon Crawler");
-        String bigText = new String("Welcome to the \n Trials of "
-            + "Torturestone Castle");
+        String bigText = new String("Welcome to \n Dying for Die");
         String bg = new String("file:resources/images/backgrounds/welcome_screen.png");
         String playText = new String("Click Here to Begin");
         String stats = null;
@@ -64,10 +68,8 @@ public class Controller extends Application {
 
         advanceButton.setOnAction(e -> {
             if (configScreen.checkSelections() > 0) {
-                setSelections(configScreen.getInput(),
-                    configScreen.getDifficulty(), null, configScreen.getGold());
                 try {
-                    generateBoard();
+                    generateBoard(configScreen.getInput(), configScreen.getGold(), configScreen.getChtr());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -81,41 +83,69 @@ public class Controller extends Application {
         stage.show();
     }
 
-    private void setSelections(String name, int diff, String weap, int gold) {
-        playerModel.setName(name);
-        playerModel.setDifficulty(diff);
-        playerModel.setStartingWeapon(weap);
-        playerModel.setGold(gold);
-        playerModel.setGoldMult(1);
-        playerModel.setDP(0);
-        playerModel.setAP(5);
-        playerModel.setHP(10 * gold);
-    }
-
-    private void generateBoard() throws IOException {
+    @FXML
+    public void generateBoard(String name, int gold, Color chtr) throws IOException {
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
         String fxmlDocPath = "C:\\Users\\royal\\OneDrive\\Desktop\\CS3300\\CS3300-SU21\\Board.fxml";
         FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
 
+        //loader.setController(this);
+
         // Create the Pane and all Details
-        GridPane root = loader.load(fxmlStream);
+        grid = loader.load(fxmlStream);
 
         // Create the Scene
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(grid);
         // Set the Scene to the Stage
         stage.setScene(scene);
         // Set the Title to the Stage
         stage.setTitle("A SceneBuilder Example");
+
+        playerModel.setName(name);
+        playerModel.setGold(gold);
+        circ = chtr;
+        playerModel.setCharacter(chtr);
+        user.setFill(chtr);
+        grid.add(user, 0, 1);
+
+        c = GridPane.getColumnIndex(user);
+        r = GridPane.getRowIndex(user);
         // Display the Stage
         stage.show();
     }
 
+    @FXML
     public void moveOneSquare(ActionEvent actionEvent) {
+
+        grid.getChildren().remove(user);
+
+        if ((c == 7 && r == 1) || (c == 0 && r == 3) || (r == 2 || r == 4)) {
+            //GridPane.setRowIndex(user, r + 1);
+            r++;
+        } else if (r == 3) {
+            //GridPane.setColumnIndex(user, c - 1);
+            c--;
+        } else {
+            //GridPane.setColumnIndex(user, c + 1);
+            c++;
+        }
+
+        grid.add(user, c, r);
+
+        //user.setFill(circ);
     }
 
+    @FXML
     public void move3Squares(ActionEvent actionEvent) {
+        for(int i = 1; i <= 3; i++) {
+            moveOneSquare(actionEvent);
+        }
+    }
+
+    public Circle getUser() {
+        return user;
     }
 
 }

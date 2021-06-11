@@ -1,17 +1,12 @@
 package model;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class PlayerModel {
     private String name;
-    private String startingWeapon;
-    private ImageView startWeapon;
-    private int difficulty;
+    private Color character;
     private int gold;
-    private int healthPoints;
-    private int attackPoints;
-    private int defensePoints;
-    private int goldMult;
 
     public void setName(String name) {
         this.name = name;
@@ -21,24 +16,12 @@ public class PlayerModel {
         return name;
     }
 
-    public void setStartingWeapon(String weapon) {
-        this.startingWeapon = weapon;
+    public void setCharacter(Color character) {
+        this.character = character;
     }
 
-    public String getStartingWeapon() {
-        return startingWeapon;
-    }
-
-    public ImageView getStartWeapon() {
-        return startWeapon;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    public int getDifficulty() {
-        return difficulty;
+    public Color getCharacter() {
+        return character;
     }
 
     public void setGold(int gold) {
@@ -47,38 +30,6 @@ public class PlayerModel {
 
     public int getGold() {
         return gold;
-    }
-
-    public void setHP(int hp) {
-        this.healthPoints = hp;
-    }
-
-    public int getHP() {
-        return healthPoints;
-    }
-
-    public void setAP(int ap) {
-        this.attackPoints = ap;
-    }
-
-    public int getAP() {
-        return attackPoints;
-    }
-
-    public void setDP(int dp) {
-        this.defensePoints = dp;
-    }
-
-    public int getDP() {
-        return defensePoints;
-    }
-
-    public void setGoldMult(int mult) {
-        this.goldMult = mult;
-    }
-
-    public int getGoldMult() {
-        return goldMult;
     }
 
 }
