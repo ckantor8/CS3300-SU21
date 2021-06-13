@@ -31,7 +31,5 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="60.0" stroke="BLACK" strokeType="INSIDE" width="75.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="56.0" stroke="BLACK" strokeType="INSIDE" width="77.0" GridPane.rowIndex="4" />
       <Line endX="-100.62132263183594" startX="-100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" onAction="#moveOneSquare" prefHeight="25.0" prefWidth="161.0" text="Move 1" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-      <Button mnemonicParsing="false" onAction="#move3Squares" prefHeight="25.0" prefWidth="150.0" text="Move 3" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="6" />
    </children>
 </GridPane>
