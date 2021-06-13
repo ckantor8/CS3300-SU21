@@ -17,3 +17,7 @@
     -fx-background-radius: 10;
     -fx-alignment: center;
 }
+
+.mygridStyle Line {
+    -fx-stroke   : black;
+}

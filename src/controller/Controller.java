@@ -4,8 +4,12 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -93,6 +97,9 @@ public class Controller extends Application {
 
         // Create the Pane and all Details
         grid = loader.load(fxmlStream);
+
+        grid.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(0), new Insets(0))));
+        grid.getStyleClass().add("mygridStyle");
 
         // Create the Scene
         Scene scene = new Scene(grid);
