@@ -20,22 +20,21 @@ import java.io.IOException;
 public class Controller extends Application {
     @FXML
     public GridPane grid;
-    @FXML
     public Circle user = new Circle(15);
+    public Button moveOne = new Button("Move 1");
+    public Button moveThree = new Button("Move 3");
     private Stage stage;
-    private PlayerModel playerModel;
+    public PlayerModel playerModel = new PlayerModel();
     private final int width = 500;
     private final int height = 500;
     private int c = 0;
     private int r = 1;
-    private Color circ;
-
+    private Color color;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.setTitle("Your New Favorite Dungeon Crawler");
-        playerModel = new PlayerModel();
         initWelcomeScreen();
     }
 
@@ -83,7 +82,6 @@ public class Controller extends Application {
         stage.show();
     }
 
-    @FXML
     public void generateBoard(String name, int gold, Color chtr) throws IOException {
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
@@ -105,43 +103,66 @@ public class Controller extends Application {
 
         playerModel.setName(name);
         playerModel.setGold(gold);
-        circ = chtr;
         playerModel.setCharacter(chtr);
-        user.setFill(chtr);
+        user.setFill(playerModel.getCharacter());
+        color = playerModel.getCharacter();
         grid.add(user, 0, 1);
+        grid.add(moveOne, 1, 6, 2, 1);
+        grid.add(moveThree, 5, 6, 2, 1);
 
         c = GridPane.getColumnIndex(user);
         r = GridPane.getRowIndex(user);
         // Display the Stage
         stage.show();
+
+        moveOne.setOnAction(e -> moveOneSquare());
+        moveThree.setOnAction(e -> move3Squares());
     }
 
-    @FXML
-    public void moveOneSquare(ActionEvent actionEvent) {
+    public void moveOneSquare() {
 
         grid.getChildren().remove(user);
 
         if ((c == 7 && r == 1) || (c == 0 && r == 3) || (r == 2 || r == 4)) {
-            //GridPane.setRowIndex(user, r + 1);
             r++;
         } else if (r == 3) {
-            //GridPane.setColumnIndex(user, c - 1);
             c--;
+        } else if (c == 7 && r == 5) {
+            youWin();
         } else {
-            //GridPane.setColumnIndex(user, c + 1);
             c++;
         }
 
+        //user.setFill(playerModel.getCharacter());
         grid.add(user, c, r);
+        //user.setFill(playerModel.getCharacter());
 
-        //user.setFill(circ);
     }
 
-    @FXML
-    public void move3Squares(ActionEvent actionEvent) {
+    public void move3Squares() {
         for(int i = 1; i <= 3; i++) {
-            moveOneSquare(actionEvent);
+            moveOneSquare();
         }
+    }
+
+    private void youWin() {
+        stage.setTitle("You Win!");
+        String bigText = new String("Congratulations on winning \n "
+            + "Dying for Die, " + playerModel.getName() + "!");
+        String bg = new String("file:resources/images/backgrounds/win_screen.jpg");
+        String playText = new String("Click Here to Play Again");
+        Screen winScreen = new Screen(width, height, bigText, bg, playText, null);
+
+        Button quitButton = winScreen.getQuitButton();
+        quitButton.setOnAction(e -> stage.close());
+
+        Button replayButton = winScreen.getPlayButton();
+        replayButton.setId("replaybutton");
+        replayButton.setOnAction(e -> initWelcomeScreen());
+
+        Scene winScene = winScreen.getScene();
+        stage.setScene(winScene);
+        stage.show();
     }
 
     public Circle getUser() {
