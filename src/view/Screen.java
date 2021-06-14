@@ -26,18 +26,16 @@ public class Screen {
     private String bigText;
     private String background;
     private String playText;
-    private String stats;
 
     private Screen() {
     }
 
     public Screen(int width, int height, String bigText, String background,
-                  String playText, String stats) {
+                  String playText) {
         this.width = width;
         this.height = height;
         this.bigText = bigText;
         this.background = background;
-        this.stats = stats;
         playButton = new Button(playText);
         playButton.setId("playButton");
         quitButton = new Button("Quit Game");
@@ -81,20 +79,11 @@ public class Screen {
             pane.setBottom(buttons);
             pane.setMargin(buttons, new Insets(0, 0, 10, 0));
         } else if (bigText.contains("Congratulations")) {
-            Text stat = new Text(stats);
-            stat.setStyle("-fx-font: 14 System");
-            pane.setTop(stat);
             text.setFill(Color.BLACK);
             pane.setCenter(text);
-            pane.setAlignment(stat, Pos.TOP_CENTER);
             pane.setBottom(buttons);
             pane.setMargin(buttons, new Insets(0, 0, 60, 0));
         } else {
-            Text stat = new Text(stats);
-            stat.setStyle("-fx-font: 14 System");
-            stat.setFill(Color.INDIANRED);
-            pane.setAlignment(stat, Pos.TOP_CENTER);
-            pane.setTop(stat);
             pane.setBottom(buttons);
             pane.setMargin(buttons, new Insets(0, 0, 5, 0));
         }

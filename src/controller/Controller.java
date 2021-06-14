@@ -1,7 +1,6 @@
 package controller;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,12 +22,12 @@ import java.io.IOException;
 
 public class Controller extends Application {
     @FXML
-    public GridPane grid;
-    public Circle user = new Circle(15);
-    public Button moveOne = new Button("Move 1");
-    public Button moveThree = new Button("Move 3");
+    private GridPane grid;
+    private Circle user = new Circle(15);
+    private Button moveOne = new Button("Move 1");
+    private Button moveThree = new Button("Move 3");
     private Stage stage;
-    public PlayerModel playerModel = new PlayerModel();
+    private PlayerModel playerModel = new PlayerModel();
     private final int width = 500;
     private final int height = 500;
     private int c = 0;
@@ -45,10 +44,11 @@ public class Controller extends Application {
     private void initWelcomeScreen() {
         stage.setTitle("Your New Favorite Dungeon Crawler");
         String bigText = new String("Welcome to \n Dying for Die");
-        String bg = new String("file:resources/images/backgrounds/welcome_screen.png");
+        String bg = new String("file:resources/"
+            + "images/backgrounds/welcome_screen.png");
         String playText = new String("Click Here to Begin");
         String stats = null;
-        Screen welcomeScreen = new Screen(width, height, bigText, bg, playText, null);
+        Screen welcomeScreen = new Screen(width, height, bigText, bg, playText);
 
         Button quitButton = welcomeScreen.getQuitButton();
         quitButton.setOnAction(e -> stage.close());
@@ -72,7 +72,8 @@ public class Controller extends Application {
         advanceButton.setOnAction(e -> {
             if (configScreen.checkSelections() > 0) {
                 try {
-                    generateBoard(configScreen.getInput(), configScreen.getGold(), configScreen.getChtr());
+                    generateBoard(configScreen.getInput(),
+                        configScreen.getGold(), configScreen.getChtr());
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -90,7 +91,8 @@ public class Controller extends Application {
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
-        String fxmlDocPath = "C:\\Users\\royal\\OneDrive\\Desktop\\CS3300\\CS3300-SU21\\Board.fxml";
+        String fxmlDocPath = "C:\\Users\\royal\\One"
+            + "Drive\\Desktop\\CS3300\\CS3300-SU21\\Board.fxml";
         FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
 
         //loader.setController(this);
@@ -98,7 +100,8 @@ public class Controller extends Application {
         // Create the Pane and all Details
         grid = loader.load(fxmlStream);
 
-        grid.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(0), new Insets(0))));
+        grid.setBackground(new Background(new BackgroundFill(Color.BLACK,
+            new CornerRadii(0), new Insets(0))));
         grid.getStyleClass().add("mygridStyle");
 
         // Create the Scene
@@ -147,7 +150,7 @@ public class Controller extends Application {
     }
 
     public void move3Squares() {
-        for(int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 3; i++) {
             moveOneSquare();
         }
     }
@@ -156,9 +159,10 @@ public class Controller extends Application {
         stage.setTitle("You Win!");
         String bigText = new String("Congratulations on winning \n "
             + "Dying for Die, " + playerModel.getName() + "!");
-        String bg = new String("file:resources/images/backgrounds/win_screen.jpg");
+        String bg = new String("file:resources/"
+            + "images/backgrounds/win_screen.jpg");
         String playText = new String("Click Here to Play Again");
-        Screen winScreen = new Screen(width, height, bigText, bg, playText, null);
+        Screen winScreen = new Screen(width, height, bigText, bg, playText);
 
         Button quitButton = winScreen.getQuitButton();
         quitButton.setOnAction(e -> stage.close());
