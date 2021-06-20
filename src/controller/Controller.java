@@ -14,25 +14,28 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import model.PlayerModel;
-import view.ConfigScreen;
+import view.InitialConfigScreen;
+import view.PlayerConfigScreen;
 import view.Screen;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Controller extends Application {
     @FXML
     private GridPane grid;
-    private Circle user = new Circle(15);
     private Button moveOne = new Button("Move 1");
     private Button moveThree = new Button("Move 3");
     private Stage stage;
-    private PlayerModel playerModel = new PlayerModel();
     private final int width = 500;
     private final int height = 500;
-    private int c = 0;
-    private int r = 1;
-    private Color color;
+    private String title;
+    private int numPlayers;
+    private int startingGold;
+    private ArrayList<PlayerModel> players = new ArrayList<>();
+    private PlayerModel currPlayer;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -54,16 +57,40 @@ public class Controller extends Application {
         quitButton.setOnAction(e -> stage.close());
 
         Button playButton = welcomeScreen.getPlayButton();
-        playButton.setOnAction(e -> goToConfigScreen());
+        playButton.setOnAction(e -> goToInitialConfigScreen());
 
         Scene welcomeScene = welcomeScreen.getScene();
         stage.setScene(welcomeScene);
         stage.show();
     }
 
-    private void goToConfigScreen() {
+    private void goToInitialConfigScreen() {
         stage.setTitle("Choose Very Carefully");
-        ConfigScreen configScreen = new ConfigScreen(width, height);
+        InitialConfigScreen initialConfigScreen = new InitialConfigScreen(width, height);
+
+        Button returnButton = initialConfigScreen.getReturnButton();
+        returnButton.setOnAction(e -> initWelcomeScreen());
+        Button advanceButton = initialConfigScreen.getAdvanceButton();
+
+        advanceButton.setOnAction(e -> {
+            if (initialConfigScreen.checkSelections() > 0) {
+                title = initialConfigScreen.getInput();
+                numPlayers = initialConfigScreen.getNumPlayers();
+                startingGold = initialConfigScreen.getGold();
+                playerConfigScreens();
+            } else {
+                goToInitialConfigScreen();
+            }
+        });
+
+        Scene configScene = initialConfigScreen.setupScene();
+        stage.setScene(configScene);
+        stage.show();
+    }
+
+    private void playerConfigScreens() {
+        stage.setTitle("Choose Very Carefully");
+        PlayerConfigScreen configScreen = new PlayerConfigScreen(width, height);
 
         Button returnButton = configScreen.getReturnButton();
         returnButton.setOnAction(e -> initWelcomeScreen());
@@ -71,23 +98,31 @@ public class Controller extends Application {
 
         advanceButton.setOnAction(e -> {
             if (configScreen.checkSelections() > 0) {
-                try {
-                    generateBoard(configScreen.getInput(),
-                        configScreen.getGold(), configScreen.getChtr());
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                PlayerModel player =
+                    new PlayerModel(configScreen.getInput(),
+                        configScreen.getChtr(), startingGold);
+                players.add(player);
+                if (players.size() == numPlayers) {
+                    try {
+                        generateBoard();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                } else {
+                    playerConfigScreens();
                 }
             } else {
-                goToConfigScreen();
+                playerConfigScreens();
             }
         });
 
         Scene configScene = configScreen.setupScene();
         stage.setScene(configScene);
         stage.show();
+
     }
 
-    public void generateBoard(String name, int gold, Color chtr) throws IOException {
+    public void generateBoard() throws IOException {
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
@@ -109,28 +144,35 @@ public class Controller extends Application {
         // Set the Scene to the Stage
         stage.setScene(scene);
         // Set the Title to the Stage
-        stage.setTitle("A SceneBuilder Example");
+        stage.setTitle(title);
 
-        playerModel.setName(name);
-        playerModel.setGold(gold);
-        playerModel.setCharacter(chtr);
-        user.setFill(playerModel.getCharacter());
-        color = playerModel.getCharacter();
-        grid.add(user, 0, 1);
+        for (PlayerModel player : players) {
+            Circle sprite = new Circle(5);
+            sprite.setFill(player.getCharacter());
+            player.setSprite(sprite);
+            grid.add(sprite, 0, 1);
+        }
+
         grid.add(moveOne, 1, 6, 2, 1);
         grid.add(moveThree, 5, 6, 2, 1);
 
-        c = GridPane.getColumnIndex(user);
-        r = GridPane.getRowIndex(user);
         // Display the Stage
         stage.show();
 
-        moveOne.setOnAction(e -> moveOneSquare());
-        moveThree.setOnAction(e -> move3Squares());
+        for (PlayerModel player : players) {
+            takeTurn(player);
+        }
     }
 
-    public void moveOneSquare() {
+    public void takeTurn(PlayerModel player) {
+        moveOne.setOnAction(e -> moveOneSquare(player));
+        moveThree.setOnAction(e -> move3Squares(player));
+    }
 
+    public void moveOneSquare(PlayerModel player) {
+        Circle user = player.getSprite();
+        int c = GridPane.getColumnIndex(user);
+        int r = GridPane.getRowIndex(user);
         grid.getChildren().remove(user);
 
         if ((c == 7 && r == 1) || (c == 0 && r == 3) || (r == 2 || r == 4)) {
@@ -149,16 +191,16 @@ public class Controller extends Application {
 
     }
 
-    public void move3Squares() {
+    public void move3Squares(PlayerModel player) {
         for (int i = 1; i <= 3; i++) {
-            moveOneSquare();
+            moveOneSquare(player);
         }
     }
 
     private void youWin() {
         stage.setTitle("You Win!");
         String bigText = new String("Congratulations on winning \n "
-            + "Dying for Die, " + playerModel.getName() + "!");
+            + "Dying for Die, " + currPlayer.getName() + "!");
         String bg = new String("file:resources/"
             + "images/backgrounds/win_screen.jpg");
         String playText = new String("Click Here to Play Again");
@@ -174,10 +216,6 @@ public class Controller extends Application {
         Scene winScene = winScreen.getScene();
         stage.setScene(winScene);
         stage.show();
-    }
-
-    public Circle getUser() {
-        return user;
     }
 
 }

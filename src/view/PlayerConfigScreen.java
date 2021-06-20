@@ -26,7 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class ConfigScreen {
+public class PlayerConfigScreen {
     private int width;
     private int height;
     private Button advanceButton;
@@ -35,24 +35,19 @@ public class ConfigScreen {
     private TextField name;
     private Color chtr;
     private String input;
-    private ToggleButton easy;
-    private ToggleButton medium;
-    private ToggleButton hard;
-    private ToggleButton vhard;
     private ToggleButton red;
     private ToggleButton blue;
     private ToggleButton yellow;
     private ToggleButton purple;
-    private int gold;
 
-    private ConfigScreen() {
+    private PlayerConfigScreen() {
     }
 
-    public ConfigScreen(int width, int height) {
+    public PlayerConfigScreen(int width, int height) {
         this.width = width;
         this.height = height;
         returnButton = new Button("Back");
-        advanceButton = new Button("Begin Game");
+        advanceButton = new Button("Advance");
     }
 
     public Scene setupScene() {
@@ -96,45 +91,6 @@ public class ConfigScreen {
         instruction1.getChildren().add(instr1);
         options.getChildren().add(instruction1);
         options.getChildren().add(name);
-        HBox difficulties = new HBox();
-        difficulties.setSpacing(10);
-        difficulties.setAlignment(Pos.CENTER);
-        Text instr2 = new Text("Select Your Initial $$$");
-        instr2.setFill(Color.DARKSLATEGRAY);
-        instr2.setFont(new Font("Copperplate Gothic Bold", 17));
-        StackPane instruction2 = new StackPane();
-        instruction2.setBackground(new Background(new
-            BackgroundFill(Color.ORANGERED, CornerRadii.EMPTY,
-            new Insets(0, 140, 0, 140))));
-        instruction2.getChildren().add(instr2);
-        options.getChildren().add(instruction2);
-        options.getChildren().add(difficulties);
-
-        ToggleGroup difficulty = new ToggleGroup();
-        easy = new ToggleButton("$4");
-        easy.setId("4");
-        easy.getStyleClass().add("bronze");
-        easy.getStyleClass().add("button");
-        difficulties.getChildren().add(easy);
-        easy.setToggleGroup(difficulty);
-        medium = new ToggleButton("$3");
-        medium.setId("3");
-        medium.getStyleClass().add("silver");
-        medium.getStyleClass().add("button");
-        difficulties.getChildren().add(medium);
-        medium.setToggleGroup(difficulty);
-        hard = new ToggleButton("$2");
-        hard.setId("2");
-        hard.getStyleClass().add("gold");
-        hard.getStyleClass().add("button");
-        difficulties.getChildren().add(hard);
-        hard.setToggleGroup(difficulty);
-        vhard = new ToggleButton("$1");
-        vhard.setId("1");
-        vhard.getStyleClass().add("plat");
-        vhard.getStyleClass().add("button");
-        difficulties.getChildren().add(vhard);
-        vhard.setToggleGroup(difficulty);
 
         Text instr3 = new Text("Choose a Character");
         instr3.setFill(Color.DARKSLATEGRAY);
@@ -205,23 +161,6 @@ public class ConfigScreen {
                 + " entered\nPlease enter a valid name");
             invalidName.show();
         } else {
-            if (easy.isSelected()) {
-                gold = 4;
-            } else if (medium.isSelected()) {
-                gold = 3;
-            } else if (hard.isSelected()) {
-                gold = 2;
-            } else if (vhard.isSelected()) {
-                gold = 1;
-            } else {
-                Alert invalidDiff = new Alert(Alert.AlertType.ERROR);
-                invalidDiff.setTitle("Error Dialog");
-                invalidDiff.setHeaderText("Invalid Difficulty");
-                invalidDiff.setContentText("No difficulty chosen\nPlease "
-                    + "select a difficulty");
-                invalidDiff.show();
-            }
-
             if (red.isSelected()) {
                 chtr = Color.RED;
             } else if (blue.isSelected()) {
@@ -239,7 +178,7 @@ public class ConfigScreen {
                 invalidW.show();
             }
 
-            if (!chtr.equals("0") && gold != 0) {
+            if (!chtr.equals("0")) {
                 return 1;
             }
 
@@ -253,10 +192,6 @@ public class ConfigScreen {
 
     public String getInput() {
         return input;
-    }
-
-    public int getGold() {
-        return gold;
     }
 
     public Button getAdvanceButton() {
